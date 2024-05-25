@@ -3,7 +3,6 @@ import { Hono } from 'hono'
 import locationController from './controller/locationController';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { Env } from '../env';
-import { LocationRepository } from './repository/LocationRepository';
 import appHono from './honoAppBinding';
 import ItemsController from './controller/ItemsController';
 import orderController from './controller/orderController';

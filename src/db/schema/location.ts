@@ -1,6 +1,7 @@
 import { sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { auditSchema } from "./audit";
 
+
 export const tableName = 'locations';
 
 export const definition = {  
@@ -15,3 +16,4 @@ export const locationTable = sqliteTable(tableName,{
     ...definition ,
     ...auditSchema
 });
+
