@@ -5,5 +5,5 @@ export interface Order extends BaseModel {
   status: string;
   locationId: number;
   totalAmount: number;
-  customerId: string;
+  customerId?: string;
 }
