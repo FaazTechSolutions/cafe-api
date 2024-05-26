@@ -21,10 +21,20 @@ app.get('/locations', async (c) => {
  const locations= await repo.setDb(c.env.DB).GetLocations();
     return c.json(successResponse({locations}));
   });
-app.get('/locations/:id',authenticateJWT, async (c) => {
+app.get('/locations/:id', async (c) => {
   const id  = c.req.param();
   const location= await repo.setDb(c.env.DB).GetLocationById(parseInt(id.id));
   return c.json(successResponse({location}));
+});
+app.get('/locations/:id/seats', async (c) => {  
+  const locationId  = c.req.param();
+  const location= await repo.setDb(c.env.DB).GetLocationSeatsByLocationId(parseInt(locationId.id)); 
+  return c.json(successResponse({location}));
+});
+app.get('/locationsWithSeats/:id', async (c) => {  
+  const locationId  = c.req.param(); 
+  const locationswithSeats= await repo.setDb(c.env.DB).GetLocationSeats(parseInt(locationId.id));  
+  return c.json(successResponse({locationswithSeats}));
 });
 
 export default app;

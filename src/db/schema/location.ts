@@ -1,10 +1,13 @@
 import { sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { auditSchema } from "./audit";
+import locationSeats from "./locationSeat";
+import { relations } from "drizzle-orm";
+
 
 
 export const tableName = 'locations';
 
-export const definition = {  
+export const locationTabledefinition = {  
   name:text('name'),
   status:text('status'),
   image:text('image'),
@@ -12,8 +15,14 @@ export const definition = {
   officeBoyMobile:text('officeBoyMobile') 
 };
 
-export const locationTable = sqliteTable(tableName,{
-    ...definition ,
+export const location = sqliteTable(tableName,{
+    ...locationTabledefinition ,
     ...auditSchema
 });
 
+// export  const locationTableRelations = relations(location, ({ many }) => ({
+//   seats: many(locationSeats),
+// }));
+
+
+export default location

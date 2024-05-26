@@ -1,8 +1,8 @@
 import { BaseModel } from "./baseModel";
 import { z } from "zod";
 export interface LocationSeats extends BaseModel {
-    locationId: string;
-    seatId: string;
+    locationId: number;
+    seatId: number;
     seatNo: string;
     orderUrl: string;
 }
