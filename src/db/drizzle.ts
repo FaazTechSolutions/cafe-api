@@ -1,11 +1,15 @@
-import { drizzle } from "drizzle-orm/d1";
-import { Env } from "hono";
-import { employeeTable } from "./schema/employee";
-import { location } from "./schema/location";
-import { locationSeats } from "./schema/locationSeat";
+import employee from "./schema/employee";
+import location from "./schema/location";
+import locationSeats from "./schema/locationSeat";
+import items from "./schema/item";
+import order from "./schema/order";
+import orderLines from "./schema/orderLines";
 
 export const tables = {
-    employee:employeeTable,
-    location:location,
-    locationsseats:locationSeats
-  };
+  employee,
+  location,
+  locationSeats,
+  items,
+  order,
+  orderLines,
+};

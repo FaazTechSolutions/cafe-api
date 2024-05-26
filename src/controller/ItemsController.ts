@@ -1,22 +1,32 @@
-import { Hono } from 'hono';
-import appHono from '../honoAppBinding';
+import { Hono } from "hono";
+import appHono from "../honoAppBinding";
+import { ItemRepository } from "../repository/itemRepository";
+import { successResponse } from "../utils/apiResponce";
+import { Item } from "../models/item";
 
+const app = appHono;
+const repo = new ItemRepository();
 
-const app =  appHono;;
-
-
-app.post('/CreateItem', async (c) => {
-  const user = await c.req.json();
-  return c.json(user);
+app.post("/item", async (c) => {
+  const itemToCreate = await c.req.json();
+  const createdItem = await repo.setDb(c.env.DB).CreateItem(itemToCreate);
+  return c.json(successResponse(createdItem));
 });
-app.get('/Items', async (c) => {
-    
-    return c.json({"test":"test Value from Items get"});
-  });
-app.get('/Items/:id', async (c) => {
-  const id  = c.req.param();
- 
-  return c.json({"test Items id":id});
+app.put("/item/:id", async (c) => {
+  const id = c.req.param();
+  const itemToUpdate = await c.req.json() as Item
+  itemToUpdate.id=parseInt(id.id)
+  const updatedItem = await repo.setDb(c.env.DB).UpdateItem(itemToUpdate);
+  return c.json(successResponse(updatedItem));
+});
+app.get("/items", async (c) => {
+  const [items] = await repo.GetItems();
+  return c.json(successResponse(items));
+});
+app.get("/items/:id", async (c) => {
+  const id = c.req.param();
+  const item = await repo.GetItemsById(parseInt(id.id));
+  return c.json(successResponse(item));
 });
 
 export default app;

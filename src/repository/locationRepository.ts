@@ -3,8 +3,9 @@ import { tables } from "../db/drizzle";
 import { Location, LocationWithSeats } from "../models/location";
 import { DrizzleD1Database, drizzle } from "drizzle-orm/d1";
 import { LocationSeats } from "../models/locationSeats";
+import { Repository } from "./repository";
 
-export class LocationRepository {
+export class LocationRepository  extends Repository{
   db: DrizzleD1Database<Record<string, never>>;
 
   setDb(db: D1Database): LocationRepository {
@@ -33,8 +34,8 @@ export class LocationRepository {
   async GetLocationSeatsByLocationId(id: number): Promise<LocationSeats[]> {
     const locationSeats = await this.db
     .select()
-    .from(tables.locationsseats)
-    .where(eq(tables.locationsseats.locationId, id))
+    .from(tables.locationSeats)
+    .where(eq(tables.locationSeats.locationId, id))
     return locationSeats
   }
   async GetLocationSeats(locationId: number): Promise<any> {
@@ -60,8 +61,8 @@ export class LocationRepository {
 
       const locationSeats = await this.db
       .select()
-      .from(tables.locationsseats)
-      .where(eq(tables.locationsseats.locationId, locationId))   
+      .from(tables.locationSeats)
+      .where(eq(tables.locationSeats.locationId, locationId))   
 
       if(location && locationSeats){
         debugger;

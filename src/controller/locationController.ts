@@ -11,8 +11,7 @@ import { authenticateJWT } from '../middleware/authenticateJWT';
 const app = appHono;
 const repo = new LocationRepository()
 
-app.post('/location',validateRequest(LocationValidation), async (c) => {
-  debugger;
+app.post('/location',validateRequest(LocationValidation), async (c) => {  
   const location = await c.req.json();
    const createdlocation=await repo.setDb(c.env.DB).CreateLocation(location)
   return  c.json(successResponse(createdlocation));

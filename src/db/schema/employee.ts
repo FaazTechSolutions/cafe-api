@@ -3,7 +3,7 @@ import { auditSchema } from "./audit";
 
 export const tableName = 'employees';
 
-export const definition = {  
+export const tableDefinition = {  
   employeeId: text('employeeId'),
   employeeName: text('employeeName'),
   profession:text('profession'),
@@ -11,7 +11,9 @@ export const definition = {
  
 };
 
-export const employeeTable = sqliteTable(tableName,{
-    ...definition ,
+export const employee = sqliteTable(tableName,{
+    ...tableDefinition ,
     ...auditSchema
 });
+
+export default employee
