@@ -78,6 +78,17 @@ export class LocationRepository {
       return await ls ;
     
   }
+  async UpdateLocation(location: Partial<Location>): Promise<Location> {
+    let _location=location as Location;
 
+    const [uplatedLocation] = await this.db
+      .update(tables.location)
+      .set(location)
+      .where(eq(tables.location.id,location.id))
+      .returning()
+
+      
+    return uplatedLocation;
+  }
 
 }

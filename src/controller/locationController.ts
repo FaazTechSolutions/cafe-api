@@ -3,7 +3,7 @@ import { LocationRepository } from '../repository/locationRepository';
 import { drizzle } from 'drizzle-orm/d1';
 import appHono from '../honoAppBinding';
 import { validateRequest } from '../middleware/validateRequest';
-import { LocationValidation } from '../models/location';
+import { Location, LocationValidation } from '../models/location';
 import { successResponse } from '../utils/apiResponce';
 import { authenticateJWT } from '../middleware/authenticateJWT';
 
@@ -14,8 +14,16 @@ const repo = new LocationRepository()
 app.post('/location',validateRequest(LocationValidation), async (c) => {
   debugger;
   const location = await c.req.json();
-    repo.setDb(c.env.DB).CreateLocation(location)
-  return  c.json(successResponse(location));
+   const createdlocation=await repo.setDb(c.env.DB).CreateLocation(location)
+  return  c.json(successResponse(createdlocation));
+});
+//update locations/id - location as json  
+app.put('/locations/:id',validateRequest(LocationValidation), async (c) => {
+  const id  = c.req.param();
+  const locationToupdate = await c.req.json() as Partial<Location>;
+  locationToupdate.id= parseInt(id.id)
+  const location= await repo.setDb(c.env.DB).UpdateLocation(locationToupdate);
+  return c.json(successResponse({location}));
 });
 app.get('/locations', async (c) => { 
  const locations= await repo.setDb(c.env.DB).GetLocations();
