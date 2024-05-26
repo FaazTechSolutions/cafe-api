@@ -6,6 +6,7 @@ import { Env } from '../env';
 import appHono from './honoAppBinding';
 import ItemsController from './controller/ItemsController';
 import orderController from './controller/orderController';
+import authController from './controller/authController';
 
 
 
@@ -23,10 +24,11 @@ import orderController from './controller/orderController';
 appHono.get('/', (c) => {  
   return c.text('Hello Hono! with me')
 })
-
+appHono.route('/api',authController)
 appHono.route('/api',locationController)
 appHono.route('/api',ItemsController)
 appHono.route('/api',orderController)
+
 
 
 export default appHono

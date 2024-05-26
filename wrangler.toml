@@ -3,6 +3,7 @@ main="src/index.ts"
 
 compatibility_date = "2022-11-22"
 
+
 [[d1_databases]]
 binding = "DB" # i.e. available in your Worker on env.DB
 database_name = "cafe-db-d1"

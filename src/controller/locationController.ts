@@ -5,6 +5,7 @@ import appHono from '../honoAppBinding';
 import { validateRequest } from '../middleware/validateRequest';
 import { LocationValidation } from '../models/location';
 import { successResponse } from '../utils/apiResponce';
+import { authenticateJWT } from '../middleware/authenticateJWT';
 
 
 const app = appHono;
@@ -20,7 +21,7 @@ app.get('/locations', async (c) => {
  const locations= await repo.setDb(c.env.DB).GetLocations();
     return c.json(successResponse({locations}));
   });
-app.get('/locations/:id', async (c) => {
+app.get('/locations/:id',authenticateJWT, async (c) => {
   const id  = c.req.param();
   const location= await repo.setDb(c.env.DB).GetLocationById(parseInt(id.id));
   return c.json(successResponse({location}));
