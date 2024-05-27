@@ -2,10 +2,9 @@ import { drizzle } from "drizzle-orm/d1";
 import { Organization, OrganizationUser } from "../models/organization";
 import { User } from "../models/user";
 import { signToken } from "../utils/jwt";
-import { PasswordHasher } from "../utils/passwordHasher";
 import { tables } from "../db/drizzle";
 import { generateGUID } from "../utils/guidGenerat";
-const hasher = new PasswordHasher();
+
 
 export class AuthService {
   private users = [
@@ -17,13 +16,13 @@ export class AuthService {
     
     const user = d1.prepare(`SELECT * FROM users WHERE username=?`).bind(username).first() as Partial<User>
     if (user) {      
-      const match=hasher.verifyPassword(password,user.password)
-      if(match){
+      //const match=hasher.verifyPassword(password,user.password)
+     // if(match){
         // Verify and Generate a JWT token for the authenticated user
        // const token = signToken(user);
        const token=generateGUID();
         return { token, user };
-      }      
+     // }      
     } else {
       throw new Error("Invalid username or password");
     }
@@ -32,9 +31,9 @@ export class AuthService {
   async SignUp(user: User, d1: D1Database) {
    
     let createdUser: User;
-    hasher.hashPassword(user.password).then((pwd) => {
-      user.password = pwd;
-    });
+    // hasher.hashPassword(user.password).then((pwd) => {
+    //   user.password = pwd;
+    // });
     await drizzle(d1).insert(tables.users).values(user).execute() 
   }
 
