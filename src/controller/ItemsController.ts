@@ -20,12 +20,12 @@ app.put("/item/:id", async (c) => {
   return c.json(successResponse(updatedItem));
 });
 app.get("/items", async (c) => {
-  const [items] = await repo.GetItems();
+  const [items] = await repo.setDb(c.env.DB).GetItems();
   return c.json(successResponse(items));
 });
 app.get("/items/:id", async (c) => {
   const id = c.req.param();
-  const item = await repo.GetItemsById(parseInt(id.id));
+  const item = await repo.setDb(c.env.DB).GetItemsById(parseInt(id.id));
   return c.json(successResponse(item));
 });
 
