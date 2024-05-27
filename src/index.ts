@@ -1,5 +1,6 @@
 import { swaggerUI } from '@hono/swagger-ui';
 import { Hono } from 'hono'
+import { cors } from 'hono/cors'
 import locationController from './controller/locationController';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { Env } from '../env';
@@ -11,7 +12,8 @@ import employeeController from './controller/employeeCotroller';
 
 
 
-
+appHono.use('/api/*',cors())
+//
 // const app = new OpenAPIHono<{Bindings:Env}>()
 // app.doc("/doc", {
 //   openapi: "3.0.0",
