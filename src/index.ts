@@ -7,6 +7,7 @@ import appHono from './honoAppBinding';
 import ItemsController from './controller/ItemsController';
 import orderController from './controller/orderController';
 import authController from './controller/authController';
+import employeeController from './controller/employeeCotroller';
 
 
 
@@ -28,6 +29,7 @@ appHono.route('/api',authController)
 appHono.route('/api',locationController)
 appHono.route('/api',ItemsController)
 appHono.route('/api',orderController)
+appHono.route('/api',employeeController)
 
 
 
