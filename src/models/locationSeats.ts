@@ -1,6 +1,6 @@
 import { BaseModel } from "./baseModel";
 import { z } from "zod";
-export interface LocationSeats extends BaseModel {
+export interface LocationSeat extends BaseModel {
     locationId: number;
     seatId: number;
     seatNo: string;

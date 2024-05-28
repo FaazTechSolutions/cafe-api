@@ -6,6 +6,7 @@ import { validateRequest } from '../middleware/validateRequest';
 import { Location, LocationValidation } from '../models/location';
 import { successResponse } from '../utils/apiResponce';
 import { authenticateJWT } from '../middleware/authenticateJWT';
+import { LocationSeat } from '../models/locationSeats';
 
 
 const app = appHono;
@@ -16,7 +17,6 @@ app.post('/location',validateRequest(LocationValidation), async (c) => {
    const createdlocation=await repo.setDb(c.env.DB).CreateLocation(location)
   return  c.json(successResponse(createdlocation));
 });
-//update locations/id - location as json  
 app.put('/locations/:id',validateRequest(LocationValidation), async (c) => {
   const id  = c.req.param();
   const locationToupdate = await c.req.json() as Partial<Location>;
@@ -24,6 +24,29 @@ app.put('/locations/:id',validateRequest(LocationValidation), async (c) => {
   const location= await repo.setDb(c.env.DB).UpdateLocation(locationToupdate);
   return c.json(successResponse({location}));
 });
+app.delete('/location/:id',async (c)=>{
+  const id  = c.req.param();
+  const location= await repo.setDb(c.env.DB).DeleteLocationById(parseInt(id.id));
+  return c.json(successResponse({location}));
+})
+app.post('/location/seat', async(c)=>{
+  const locationseat = await c.req.json();
+  const createdlocationseat=await repo.setDb(c.env.DB).CreateLocationSeat(locationseat)
+  return  c.json(successResponse(createdlocationseat));
+})
+app.put('/location/seat/:id',validateRequest(LocationValidation), async (c) => {  
+  const id  = c.req.param();
+  const locationSeatToupdate = await c.req.json() as Partial<LocationSeat>; 
+  locationSeatToupdate.id= parseInt(id.id) 
+  const locationseat= await repo.setDb(c.env.DB).UpdateLocationSeat(locationSeatToupdate);
+  return c.json(successResponse({locationseat}));
+});
+app.delete('/location/seat/:id',async (c)=>{
+  const id  = c.req.param();
+  const location= await repo.setDb(c.env.DB).DeleteLocationSeatById(parseInt(id.id));
+  return c.json(successResponse({location}));
+})
+//Get actions 
 app.get('/locations', async (c) => { 
  const locations= await repo.setDb(c.env.DB).GetLocations();
     return c.json(successResponse({locations}));

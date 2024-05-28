@@ -29,7 +29,7 @@ app.put("/employee/:id", validateRequest(EmployeeValidation), async (c) => {
   return c.json(successResponse(updatedEmployee));
 });
 app.get("/employees", async (c) => {
-  const [employees] = await drizzle(c.env.DB).select().from(tables.employee);
+  const employees = await drizzle(c.env.DB).select().from(tables.employee);
   return c.json(successResponse(employees));
 });
 app.get("/employees/:id", async (c) => {

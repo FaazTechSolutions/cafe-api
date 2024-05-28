@@ -77,12 +77,15 @@ export class OrderRepository extends Repository {
     const orderLine = ol.results as Partial<Order>[];
 
     const owl: OrderWithLines = {
-      order: order as Order,
+      //order: order as Order,
+      ...order,
       lines: orderLine as OrderLines[],
     };
 
     return owl;
   }
+
+  
 
   async CreateOrderWithTrasaction(
     order: Partial<CreateOrderModel>

@@ -19,8 +19,13 @@ app.put("/item/:id", async (c) => {
   const updatedItem = await repo.setDb(c.env.DB).UpdateItem(itemToUpdate);
   return c.json(successResponse(updatedItem));
 });
+app.delete('/item/:id',async (c)=>{
+  const id = c.req.param();
+  const item = await repo.setDb(c.env.DB).DeleteItemById(parseInt(id.id));
+  return c.json(successResponse(item,"Item Deleted"));
+})
 app.get("/items", async (c) => {
-  const [items] = await repo.setDb(c.env.DB).GetItems();
+  const items = await repo.setDb(c.env.DB).GetItems();
   return c.json(successResponse(items));
 });
 app.get("/items/:id", async (c) => {
@@ -28,5 +33,6 @@ app.get("/items/:id", async (c) => {
   const item = await repo.setDb(c.env.DB).GetItemsById(parseInt(id.id));
   return c.json(successResponse(item));
 });
+
 
 export default app;
