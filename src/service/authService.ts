@@ -17,14 +17,14 @@ export class AuthService {
       //const match=hasher.verifyPassword(password,user.password)
        if(match){
       // Verify and Generate a JWT token for the authenticated user
-      // const token = signToken(user);
-      const token = generateGUID();
+       
+     // const token = generateGUID();
       let user :Partial<User>={
           id:_user.id,
           userName:_user.userName,
           email:_user.email
       }
-
+      const token = await signToken(user as User);
       return { token, user };
        }
     } else {

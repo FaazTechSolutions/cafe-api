@@ -1,18 +1,25 @@
-import jwt from 'jsonwebtoken';
+import { decode, sign, verify } from "hono/jwt";
+import { User } from "../models/user";
 
-const SECRET_KEY = 'secretekey1'; 
+const SECRET_KEY = "secretekey1";
 
-export const signToken = (payload: object, expiresIn: string | number = '1h') => {
-    debugger
-    const token=  jwt.sign(payload, SECRET_KEY, { expiresIn }); 
-    console.log(token)
-    return token;
+export const signToken = async (user: User) => {
+  debugger;
+  const _payload = {
+    sub: user.name,
+    role: "admin",
+    org: "testOrg",
+    exp: Math.floor(Date.now() / 1000) + 60 * 60, // Token expires in 60 minutes 
+  };
+  const token = await sign(_payload, SECRET_KEY);
+  console.log(token);
+  return token;
 };
 
-export const verifyToken = (token: string) => {
+export const verifyToken = async (token: string) => {
   try {
-    return jwt.verify(token, SECRET_KEY);
+    return await verify(token, SECRET_KEY);
   } catch (err) {
-    throw new Error('Invalid token');
+    throw new Error("Invalid token");
   }
 };
