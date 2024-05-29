@@ -47,3 +47,5 @@ app.get("/organizations/:id", async (c) => {
     .where(eq(tables.organizations.id, parseInt(p.id)));
   return c.json(successResponse(orgs));
 });
+
+export default app

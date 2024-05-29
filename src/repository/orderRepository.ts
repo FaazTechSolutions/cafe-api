@@ -84,6 +84,27 @@ export class OrderRepository extends Repository {
 
     return owl;
   }
+  async GetTodayOrderWithLines(locationId:number=0): Promise<Partial<Order>[]> {
+
+    const today = new Date().toISOString().slice(0, 10);
+
+    let getOrderQuery = `SELECT * FROM orders WHERE date(createdon) = '${today}' `;
+    if(locationId>0){
+      getOrderQuery +=`AND locationId='${locationId}'`
+    }
+    const orders = (await this.d1.prepare(getOrderQuery).all<Partial<Order>>()).results
+
+    const orderIdString = orders.map(o => `'${o.orderId}'`).join(',');
+    const getOrderLinesQuery = `SELECT * FROM orderlines WHERE orderId IN (${orderIdString});`;
+     
+    const orderLines = (await this.d1.prepare(getOrderLinesQuery).all<OrderLines>()).results
+   
+    
+    for (const order of orders) {
+      order.lines = orderLines.filter(x=>x.orderId==order.orderId)
+    }
+    return orders;
+  }
 
   
 

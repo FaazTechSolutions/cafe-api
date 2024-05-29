@@ -25,6 +25,16 @@ app.get('/orderWithLines/:id', async (c) => {
  const orderWithLines=await repo.setDb(c.env.DB).GetOrderWithLines(id.id)
   return c.json(successResponse(orderWithLines));
   });
+  //?locationId=1
+  app.get('/OrdersWithLines/today', async (c) => {    
+    const q  = c.req.query('locationId')
+    let locationId:number;
+    if(q!=""){
+      locationId=parseInt(q);
+    }    
+    const orderWithLines=await repo.setDb(c.env.DB).GetTodayOrderWithLines(locationId)    
+    return c.json(successResponse(orderWithLines));
+    });
 app.get('/orders/:id', async (c) => {
   const id  = c.req.param();
  
@@ -32,7 +42,3 @@ app.get('/orders/:id', async (c) => {
 });
 
 export default app;
-
-function Succesresponce(createdorder: Order): any {
-  throw new Error('Function not implemented.');
-}
