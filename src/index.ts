@@ -9,10 +9,12 @@ import ItemsController from './controller/ItemsController';
 import orderController from './controller/orderController';
 import authController from './controller/authController';
 import employeeController from './controller/employeeCotroller';
-
+import organizationController from './controller/organizationController'
+import { authenticateJWT } from './middleware/authenticateJWT';
 
 
 appHono.use('/api/*',cors())
+appHono.use('/auth/*',authenticateJWT);
 //
 // const app = new OpenAPIHono<{Bindings:Env}>()
 // app.doc("/doc", {
@@ -27,11 +29,13 @@ appHono.use('/api/*',cors())
 appHono.get('/', (c) => {  
   return c.text('Hello Hono! with me')
 })
+
 appHono.route('/api',authController)
-appHono.route('/api',locationController)
+appHono.route('/api/auth',locationController)
 appHono.route('/api',ItemsController)
 appHono.route('/api',orderController)
 appHono.route('/api',employeeController)
+appHono.route('/api',organizationController)
 
 
 

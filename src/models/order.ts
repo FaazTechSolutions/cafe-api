@@ -1,4 +1,5 @@
 import { BaseModel } from "./baseModel";
+import { OrderLines } from "./orderLines";
 
 export interface Order extends BaseModel {
   orderId: string;
@@ -6,4 +7,6 @@ export interface Order extends BaseModel {
   locationId: number;
   totalAmount: number;
   customerId?: string;
+
+  lines?:OrderLines[]|null
 }
