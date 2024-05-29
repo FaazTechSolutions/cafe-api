@@ -9,8 +9,27 @@ import { authenticateJWT } from '../middleware/authenticateJWT';
 import { LocationSeat } from '../models/locationSeats';
 
 
+
 const app = appHono;
 const repo = new LocationRepository()
+
+app.post('/locationWithFile', async (c) => { 
+  
+  const body=await c.req.parseBody();  
+  const file =  body['file']
+  const value =  body['value'] as string
+  const location= JSON.parse(value) as Location  
+  try{
+    //upload file and insert the ocation 
+    //{}
+    const createdlocation=await repo.setDb(c.env.DB).CreateLocation(location)
+    return  c.json(successResponse(createdlocation)); 
+  }
+  catch(er:any){
+      //delete file and return errorResponse 
+  }
+  
+});
 
 app.post('/location',validateRequest(LocationValidation), async (c) => {  
   const location = await c.req.json();

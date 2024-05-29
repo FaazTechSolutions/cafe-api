@@ -7,7 +7,28 @@ import { errorResponse, successResponse } from "../utils/apiResponce";
 import { tables } from "../db/drizzle";
 
 const app = appHono;
+app.post("/employeeWithFile", async (c) => {
 
+  const body=await c.req.parseBody();  
+  const file =  body['file']
+  const value =  body['value'] as string
+  const employee = (JSON.parse(value)) as Employee;
+  try{
+
+    //upload file and insert the employee
+    //{}
+
+    const createdemployee = await drizzle(c.env.DB)
+    .insert(tables.employee)
+    .values(employee)
+    .returning()
+    .execute();
+  return c.json(successResponse(createdemployee));
+  }catch(er:any){
+      //delete file and return errorResponse 
+  }
+ 
+});
 app.post("/employee", validateRequest(EmployeeValidation), async (c) => {
   const employee = (await c.req.json()) as Employee;
   const createdemployee = await drizzle(c.env.DB)
