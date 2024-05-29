@@ -1,5 +1,5 @@
 import { BaseModel } from "./baseModel";
-import { LocationSeats } from "./locationSeats";
+import { LocationSeat } from "./locationSeats";
 import { z } from "zod";
 
 export interface Location extends BaseModel {
@@ -11,7 +11,7 @@ export interface Location extends BaseModel {
 }
 
 export interface LocationWithSeats extends Location {
-  locationSeats: LocationSeats[];
+  locationSeats: LocationSeat[];
 }
 
 export const LocationValidation = z.object({
