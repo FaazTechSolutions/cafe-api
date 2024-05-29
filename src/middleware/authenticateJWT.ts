@@ -1,4 +1,3 @@
-// src/middleware/authenticateJWT.ts
 import { Context, Next } from 'hono';
 import { verifyToken } from '../utils/jwt';
 
