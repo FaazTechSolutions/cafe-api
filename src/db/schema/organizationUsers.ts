@@ -5,7 +5,8 @@ export const tableName = 'organizationUsers';
 
 export const tableDefinition = {  
   organizationId: integer('organizationId'),
-  userId: integer('userId'),
+  //userId: integer('userId'),
+  username:text('userName'),
   isDefault:integer('isDefault')
 };
 

@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "3ba6e808-80cf-459b-9383-03721bece0b6",
-  "prevId": "0be91b2f-a1e7-418f-aaaf-7fd9162fdb9f",
+  "id": "218b72b6-a1cb-49eb-af7c-e223b2ff91d6",
+  "prevId": "3ba6e808-80cf-459b-9383-03721bece0b6",
   "tables": {
     "employees": {
       "name": "employees",
@@ -574,9 +574,9 @@
           "notNull": false,
           "autoincrement": false
         },
-        "userId": {
-          "name": "userId",
-          "type": "integer",
+        "userName": {
+          "name": "userName",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -635,6 +635,13 @@
       "columns": {
         "userName": {
           "name": "userName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
           "type": "text",
           "primaryKey": false,
           "notNull": false,

@@ -30,9 +30,10 @@ app.post('/orgSetup',validateRequest(OrganizationUserValidation),async(c)=>{
  await authService.OrganizationSetUp(orgUser,c.env.DB);
  return c.json(successResponse(orgUser));
 })
-app.post('/createOrg',validateRequest(OrganizationValidatoin),async(c)=>{
+app.post('/createOrg/:userName',validateRequest(OrganizationValidatoin),async(c)=>{
+  const p = c.req.param()
   const org=await c.req.json() as Organization
-  await authService.createOrganaization(org,c.env.DB);
+ const createdOrg= await authService.createOrganaization(org,p.userName,c.env.DB);
   return c.json(successResponse(org));
 })
 app.post('/changePassword',validateRequest(userValidation),async(c)=>{

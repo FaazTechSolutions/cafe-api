@@ -8,13 +8,14 @@ export interface Organization extends BaseModel {
 
 export interface OrganizationUser extends BaseModel {
   organizationId: number;
-  userId: number;
+  //userId: number;
+  username:string,
   isDefault: number;
 }
 
 export const OrganizationUserValidation = z.object({
   organizationId: z.number().int("organizatioId Required"),
-  userId: z.number().int("userId Required"),
+  username: z.number().int("userId Required"),
   isDefault: z.number().int("isDefault Required as 0 or 1").gte(0).lte(1),
 });
 
