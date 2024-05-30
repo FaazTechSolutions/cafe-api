@@ -48,13 +48,7 @@ async checkUserAlreadyExists(username:string, d1:D1Database):Promise<boolean>{
   .bind(username)
   .first() as Partial<User>;
   return (_user!=null)
-}
-  async OrganizationSetUp(orgUser: OrganizationUser, d1: D1Database) {
-    await drizzle(d1)
-      .insert(tables.organizationUsers)
-      .values(orgUser)
-      .returning();
-  }
+} 
   async createOrganaization(org: Organization,userName: string,d1: D1Database) {
     const [createdOrg] = await drizzle(d1)
       .insert(tables.organizations)

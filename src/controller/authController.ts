@@ -29,12 +29,6 @@ app.post('/signup',validateRequest(userValidation),async(c)=>{
     await authService.SignUp(user,c.env.DB);
     return c.json(successResponse(user.id));
 })
-
-app.post('/orgSetup',validateRequest(OrganizationUserValidation),async(c)=>{
-  const orgUser=await c.req.json() as OrganizationUser  
- await authService.OrganizationSetUp(orgUser,c.env.DB);
- return c.json(successResponse(orgUser));
-})
 app.post('/createOrg/:userName',validateRequest(OrganizationValidatoin),async(c)=>{
   const p = c.req.param()
   const org=await c.req.json() as Organization
