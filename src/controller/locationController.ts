@@ -67,11 +67,7 @@ app.put('/location/:id', async (c) => {
       await   c.env.R2_BUCKET.delete(key)      
       return c.json(errorResponse("Error"));
   }
-
   
-  
-  const location= await repo.setDb(c.env.DB).UpdateLocation(locationToupdate);
-  return c.json(successResponse({location}));
 });
 
 // app.post('/location',validateRequest(LocationValidation), async (c) => {  
