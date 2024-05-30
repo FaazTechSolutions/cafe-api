@@ -9,7 +9,8 @@ const app = appHono;
 const repo = new ItemRepository();
 const publicbucketURL=appConstants.publicbucketURL;
 app.post("/item", async (c) => {
-  const body=await c.req.parseBody();  
+  const body=await c.req.parseBody(); 
+  console.log("Request Body:", body);  
   const file =  body['file'] as File
   if (!file) {
     return c.json(errorResponse('File not provided'), 400);
