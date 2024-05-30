@@ -28,12 +28,16 @@ export class LocationRepository extends Repository {
     return deletedLoation as Partial<Location>;
   }
   async CreateLocation(location: Partial<Location>): Promise<Location> {
+    try{
     const [createdLocation] = await this.db
       .insert(tables.location)
       .values(location)
       .returning()
       .execute();
     return createdLocation;
+  }catch(err:any){
+    console.log(err);
+  }
   }
   async CreateLocationSeat(
     locationseat: Partial<LocationSeat>

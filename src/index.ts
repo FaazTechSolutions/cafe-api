@@ -10,6 +10,7 @@ import orderController from './controller/orderController';
 import authController from './controller/authController';
 import employeeController from './controller/employeeCotroller';
 import organizationController from './controller/organizationController'
+import userController from './controller/userController'
 import { authenticateJWT } from './middleware/authenticateJWT';
 
 
@@ -36,7 +37,6 @@ appHono.route('/api',ItemsController)
 appHono.route('/api',orderController)
 appHono.route('/api',employeeController)
 appHono.route('/api',organizationController)
-
-
+appHono.route('/api',userController)
 
 export default appHono

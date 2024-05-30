@@ -69,3 +69,5 @@ app.get("/users/:id", async (c) => {
     .from(tables.users)
     .where(eq(tables.users.id, parseInt(p.id)));
 });
+
+export default app

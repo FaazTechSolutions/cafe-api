@@ -1,12 +1,36 @@
 import { Hono } from "hono";
 import appHono from "../honoAppBinding";
 import { ItemRepository } from "../repository/itemRepository";
-import { successResponse } from "../utils/apiResponce";
+import { errorResponse, successResponse } from "../utils/apiResponce";
 import { Item } from "../models/item";
+import { appConstants } from "../consts";
 
 const app = appHono;
 const repo = new ItemRepository();
-
+const publicbucketURL=appConstants.publicbucketURL;
+app.post("/itemwithFile", async (c) => {
+  const body=await c.req.parseBody();  
+  const file =  body['file'] as File
+  if (!file) {
+    return c.json(errorResponse('File not provided'), 400);
+  } 
+  const value =  body['value'] as string
+  const itemToCreate= JSON.parse(value) as Item  
+  const name = file.name;
+  const key = `uploads/${Date.now()}_${name}`;
+  try{    
+    await   c.env.R2_BUCKET.put(key,file)       
+    const url = `${publicbucketURL}/${key}`;    
+    itemToCreate.image=url;
+    const createdItem=await repo.setDb(c.env.DB).CreateItem(itemToCreate)
+    return  c.json(successResponse(createdItem)); 
+  }
+  catch(er:any){
+      //delete file and return errorResponse 
+      await   c.env.R2_BUCKET.delete(key)    
+      return c.json(errorResponse("Error"));
+  }
+});
 app.post("/item", async (c) => {
   const itemToCreate = await c.req.json();
   const createdItem = await repo.setDb(c.env.DB).CreateItem(itemToCreate);
