@@ -5,6 +5,17 @@ compatibility_date = "2022-11-22"
 node_compat = true
 
 [[d1_databases]]
+#binding = "DB" # i.e. available in your Worker on env.DB
+#database_name = "cafesaas-d1"
+#database_id = "a764415c-b626-47b3-aad6-962d66dc230f"
+
+#preview
+
 binding = "DB" # i.e. available in your Worker on env.DB
-database_name = "cafe-db-d1"
-database_id = "5f40ee56-69dd-4dbf-b7b5-b240710da610"
+database_name = "cafesaas-d1-preview"
+database_id="b2f5aabf-514c-4745-bebc-24e2f4b56380"
+
+[[r2_buckets]]
+binding = 'R2_BUCKET' # <~ valid JavaScript variable name
+bucket_name = 'cofesaas'
+preview_bucket_name='cofesaas-preview'

@@ -13,7 +13,7 @@ import { LocationSeat } from '../models/locationSeats';
 const app = appHono;
 const repo = new LocationRepository()
 const publicbucketURL="https://pub-45e556402264457297f870315848454a.r2.dev";
-app.post('/locationWithFile', async (c) => { 
+app.post('/location', async (c) => { 
  
   const body=await c.req.parseBody();  
   const file =  body['file'] as File
@@ -40,18 +40,52 @@ app.post('/locationWithFile', async (c) => {
   
 });
 
-app.post('/location',validateRequest(LocationValidation), async (c) => {  
-  const location = await c.req.json();
-   const createdlocation=await repo.setDb(c.env.DB).CreateLocation(location)
-  return  c.json(successResponse(createdlocation));
-});
-app.put('/location/:id',validateRequest(LocationValidation), async (c) => {
+app.put('/location/:id', async (c) => {
   const id  = c.req.param();
-  const locationToupdate = await c.req.json() as Partial<Location>;
+
+  const body=await c.req.parseBody();  
+  const file =  body['file'] as File
+  if (!file) {
+    return c.json(errorResponse('File not provided'), 400);
+  } 
+  const value =  body['value'] as string
+  const locationToupdate= JSON.parse(value) as Location  
   locationToupdate.id= parseInt(id.id)
+  const name = file.name;
+  const key = `uploads/${Date.now()}_${name}`;
+  try{ 
+    debugger;   
+    await   c.env.R2_BUCKET.delete(locationToupdate.image)      
+    await   c.env.R2_BUCKET.put(key,file)       
+    const url = `${publicbucketURL}/${key}`;       
+    locationToupdate.image=url;
+    const UpdatedLocation=await repo.setDb(c.env.DB).UpdateLocation(locationToupdate)
+    return  c.json(successResponse(UpdatedLocation)); 
+  }
+  catch(er:any){
+      //delete file and return errorResponse 
+      await   c.env.R2_BUCKET.delete(key)      
+      return c.json(errorResponse("Error"));
+  }
+
+  
+  
   const location= await repo.setDb(c.env.DB).UpdateLocation(locationToupdate);
   return c.json(successResponse({location}));
 });
+
+// app.post('/location',validateRequest(LocationValidation), async (c) => {  
+//   const location = await c.req.json();
+//    const createdlocation=await repo.setDb(c.env.DB).CreateLocation(location)
+//   return  c.json(successResponse(createdlocation));
+// });
+// app.put('/location/:id',validateRequest(LocationValidation), async (c) => {
+//   const id  = c.req.param();
+//   const locationToupdate = await c.req.json() as Partial<Location>;
+//   locationToupdate.id= parseInt(id.id)
+//   const location= await repo.setDb(c.env.DB).UpdateLocation(locationToupdate);
+//   return c.json(successResponse({location}));
+// });
 app.delete('/location/:id',async (c)=>{
   const id  = c.req.param();
   const location= await repo.setDb(c.env.DB).DeleteLocationById(parseInt(id.id));
