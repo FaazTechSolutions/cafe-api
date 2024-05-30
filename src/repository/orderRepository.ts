@@ -6,6 +6,7 @@ import { OrderLines } from "../models/orderLines";
 import { tables } from "../db/drizzle";
 import { eq, inArray } from "drizzle-orm";
 import { QueryBuilder, int } from "drizzle-orm/sqlite-core";
+import { Item } from "../models/item";
 
 
 export class OrderRepository extends Repository {
@@ -69,10 +70,12 @@ export class OrderRepository extends Repository {
   async GetOrderWithLines(OrderId: string): Promise<OrderWithLines> {
     const getOrderQuery = "SELECT * FROM orders WHERE orderId=?";
     const getOrderLinesQuery = "SELECT * FROM orderlines WHERE orderId=?";
+    const geItemsQuey='SELECT * FROM items WHERE id IN '
 
     const order = await this.d1.prepare(getOrderQuery).bind(OrderId).first() as Partial<Order>;   
     const ol = await this.d1.prepare(getOrderLinesQuery).bind(OrderId).all();
-    const orderLine = ol.results as Partial<Order>[];
+    const orderLine = ol.results as Partial<OrderLines>[];
+    const itemIdString=orderLine.map(i=> `'${i}'`).join(',')
 
     const owl: OrderWithLines = {
       //order: order as Order,
@@ -96,11 +99,21 @@ export class OrderRepository extends Repository {
     const getOrderLinesQuery = `SELECT * FROM orderlines WHERE orderId IN (${orderIdString});`;
      
     const orderLines = (await this.d1.prepare(getOrderLinesQuery).all<OrderLines>()).results
-   
-    
+    const itemIdString=orderLines.map(i=> `'${i.itemId}'`).join(',')
+    const getItemsQuey=`SELECT * FROM items WHERE id IN (${itemIdString})`
+    const items = await(await this.d1.prepare(getItemsQuey).all<Item>()).results;
+
     for (const order of orders) {
-      order.lines = orderLines.filter(x=>x.orderId==order.orderId)
-    }
+      order.lines = orderLines.filter((x) => x.orderId == order.orderId);
+      for (const line of order.lines) {
+        const i = items.filter((x) => x.id.toString() == line.itemId);
+        if (i.length > 0) {
+          line.itemName = i[0].name;
+          line.itemImage = i[0].image;
+        }
+      };
+    };
+
     return orders;
   }
 
@@ -173,6 +186,8 @@ export class OrderRepository extends Repository {
           orderId: null,
           seatId: null,
           itemId: null,
+          itemName:null,
+          itemImage:null,
           Preference: null,
           locationId: null,
           quantity: null,

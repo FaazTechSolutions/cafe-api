@@ -9,7 +9,7 @@ export interface OrderlinesModel{
     seatId :number
     preference:string
     itemId:number
-    qty:number
+    qty:number                  
 }
 export interface OrderStatusModel{
     Id:number

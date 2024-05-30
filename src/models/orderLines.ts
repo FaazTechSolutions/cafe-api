@@ -4,6 +4,8 @@ export interface OrderLines extends BaseModel {
   orderId: string;
   seatId: number;
   itemId: string;
+  itemName:string;
+  itemImage:string;
   Preference: string;
   locationId: number;
   quantity: number;
