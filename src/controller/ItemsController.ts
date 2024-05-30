@@ -29,12 +29,13 @@ app.post("/item", async (c) => {
   catch(er:any){
       //delete file and return errorResponse 
       await   c.env.R2_BUCKET.delete(key)    
-      return c.json(errorResponse("Error"));
+      return c.json(errorResponse("Error",er));
   }
 });
 app.put("/item/:id", async (c) => {
   const id = c.req.param();
-  const body=await c.req.parseBody();  
+  const body=await c.req.parseBody(); 
+  console.log("Request Body:", body);  
   const file =  body['file'] as File
   if (!file) {
     return c.json(errorResponse('File not provided'), 400);
@@ -45,12 +46,12 @@ app.put("/item/:id", async (c) => {
   const name = file.name;
   const key = `uploads/${Date.now()}_${name}`;
   try{    
-    await   c.env.R2_BUCKET.delete(itemToUpdate.image)
+//    await   c.env.R2_BUCKET.delete(itemToUpdate.image)
     await   c.env.R2_BUCKET.put(key,file)       
     const url = `${publicbucketURL}/${key}`;    
     itemToUpdate.image=url;
-    const createdItem=await repo.setDb(c.env.DB).CreateItem(itemToUpdate)
-    return  c.json(successResponse(createdItem)); 
+    const updatedItem=await repo.setDb(c.env.DB).UpdateItem(itemToUpdate)
+    return  c.json(successResponse(updatedItem)); 
   }
   catch(er:any){
       //delete file and return errorResponse 
