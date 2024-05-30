@@ -26,7 +26,11 @@ app.put("/user/:id", async (c) => {
   const user = (await c.req.json()) as User;
   const updatedUser = await drizzle(c.env.DB)
     .update(tables.users)
-    .set(user)
+    .set({
+      name:user.name,
+      email: user.email,
+      mobileNumber: user.mobileNumber
+    })
     .where(eq(tables.users.id, parseInt(p.id)))
     .returning({
       id: tables.users.id,
