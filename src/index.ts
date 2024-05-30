@@ -30,10 +30,17 @@ appHono.use('/auth/*',authenticateJWT);
 appHono.get('/', (c) => {  
   return c.text('Hello Hono! with me')
 })
+appHono.get('/check', (c) => {  
 
+  const host = c.req.header('host');
+//  const ip = c.req.c.req.connection.remoteAddress;
+  const userAgent = c.req.header('user-agent');
+//  const ip = c.req.header('x-forwarded-for');
+  return c.json({ requestContext: c ,host,userAgent});
+})
 appHono.route('/api',authController)
 appHono.route('/api/auth',locationController)
-appHono.route('/api',ItemsController)
+appHono.route('/api/auth',ItemsController)
 appHono.route('/api',orderController)
 appHono.route('/api',employeeController)
 appHono.route('/api',organizationController)
