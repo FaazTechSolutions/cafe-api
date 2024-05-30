@@ -42,7 +42,6 @@ app.post('/location', async (c) => {
 
 app.put('/location/:id', async (c) => {
   const id  = c.req.param();
-
   const body=await c.req.parseBody();  
   const file =  body['file'] as File
   if (!file) {
