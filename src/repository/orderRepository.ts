@@ -16,8 +16,7 @@ export class OrderRepository extends Repository {
     this.db = drizzle(db);
     return this;
   }
-  async CreateOrder(order: Partial<CreateOrderModel>): Promise<Order> {
-    debugger;
+  async CreateOrder(order: Partial<CreateOrderModel>): Promise<Order> {    
     const orderStatus = "New";
     let _order: Order = {
       orderId: null,
@@ -32,16 +31,15 @@ export class OrderRepository extends Repository {
                                  VALUES(?,?)`;
       const createdOrder = await this.d1
         .prepare(createOrderQuery)
-        .bind(order.locationId, orderStatus)
+        .bind(order.locationId, orderStatus)        
         .run();
+        const rowid=createdOrder.meta.last_row_id
       if (createdOrder.success) {
-        let orderId: string = createdOrder.meta.last_row_id
-          .toString()
-          .padStart(7, "0"); // converting to string as a 7 char value
+        let orderId: string = rowid.toString().padStart(7, "0"); // converting to string as a 7 char value
         _order.orderId = orderId;
         console.log(orderId);
-        const OrderIdUpdateQuery = `UPDATE Orders SET orderId=?`;
-        await this.d1.prepare(OrderIdUpdateQuery).bind(orderId).run();
+        const OrderIdUpdateQuery = `UPDATE Orders SET orderId='${orderId}' where id=${rowid}`;
+        await this.d1.prepare(OrderIdUpdateQuery).run();
         let orderLinesPrepared: OrderLines[] = await this.getOrderLinesPrepared(
           orderId,
           orderStatus,
